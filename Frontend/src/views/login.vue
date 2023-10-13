@@ -33,12 +33,15 @@ export default {
             };
             const resp = await API.login(data);
 
-            if(resp==null){
-                alert("Usuario o contraseña incorrectos");
-            }else if(resp==true){
-                this.$router.push("/home");
-            }else{
-                alert("Usuario o contraseña incorrectos");
+            if (resp == null) {
+                alert("Error de conexión")
+            }
+            else if (resp == false) {
+                alert("Usuario o contraseña incorrectos")
+
+            } else {
+                alert("Bienvenido")
+                this.$router.push("/paginavoto");
             }
 
         }
@@ -54,11 +57,11 @@ export default {
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: left; 
+    text-align: left;
 }
 
 h1 {
-    text-align: center; 
+    text-align: center;
 }
 
 .login-form .input-group {

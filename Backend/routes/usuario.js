@@ -23,8 +23,8 @@ router.post('/login', async (req, res) => {
   const body = req.body;
   console.log(body)
   const contrasena = body.contrasena
-  const correo = body.correo
-  const resp = await usuarioSchema.findOne({ correo, contrasena })
+  const rut = body.rut
+  const resp = await usuarioSchema.findOne({ rut, contrasena })
     .then((result) => {
       console.log("result")
       console.log(result)

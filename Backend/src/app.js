@@ -25,9 +25,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', require('../routes/usuario'));
-app.use('/api', require('../routes/tarea'));
-app.use('/api', require('../routes/modulo'));
+app.use('/api', require('../routes/votacione'));
 app.set('puerto', process.env.PORT || 3000);
+
+const history = require('connect-history-api-fallback');
+app.use(history());
+app.use(express.static(path.join(__dirname, 'public')));
 app.listen(app.get('puerto'), () => {
   console.log('Example app listening on port'+ app.get('puerto'));
 });

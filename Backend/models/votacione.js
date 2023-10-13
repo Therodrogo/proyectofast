@@ -12,5 +12,5 @@ const votacioneSchema = new Schema({
     estado: Boolean,
 }, { versionKey: false });
 
-const modulo = mongoose.model('modulo', moduloSchema);
-module.exports = modulo;
+const votacione = mongoose.model('votacione', votacioneSchema);
+module.exports = votacione;

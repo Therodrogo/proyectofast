@@ -41,9 +41,9 @@ export default {
 
             } else {
                 alert("Bienvenido")
-                this.$router.push("/paginavoto");
+                localStorage.setItem("token", resp.token);
+                this.$router.push("/cliente");
             }
-
         }
     }
 };

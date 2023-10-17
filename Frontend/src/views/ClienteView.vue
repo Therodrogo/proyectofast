@@ -1,18 +1,23 @@
 <template>
     <div class="contenedor">
         <div style="display: flex; justify-content: space-between; width:100%">
-        <p>Pablo Gonzalez Jara</p>
-            <button style="background-color: black; color:white; border:none; border-radius: 12px; padding:7px; cursor:pointer">Cerrar Sesion</button>
+            <p>Pablo Gonzalez Jara</p>
+            <vs-button color="#000">Cerrar Sesion</vs-button>
         </div>
 
         <div class="contenido">
-        <div  v-for="(item, index) in 1" :key="index">
-            
+            <div v-if="$store.state.item==false" v-for="(item, index) in 10" :key="index">
+
+                <TarjetaVotar />
+
+            </div>
+            <div v-if="$store.state.item==true" >
                 <Votar/>
-         
+            </div>
+
+            
         </div>
-        </div>
-        
+
     </div>
 </template>
 
@@ -23,10 +28,10 @@ import TarjetaVotar from "../components/TarjetaVotar.vue"
 import Votar from "../components/Votar.vue"
 export default {
 
-    data(){
-        items:[]
+    data() {
+        items: []
     },
-    components:{
+    components: {
         TarjetaVotar,
         Votar
     }
@@ -46,10 +51,11 @@ export default {
     padding-right: 5%;
 
 }
-.contenido{
+
+.contenido {
     display: flex;
     justify-content: center;
-     flex-direction: row;
+    flex-direction: row;
     height: 100%;
     width: 100%;
     flex-wrap: wrap;

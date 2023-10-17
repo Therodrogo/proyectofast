@@ -1,11 +1,13 @@
 <template>
-    <div class="contenedorTarjeta">
-        <h3 style="margin:0;">Presidencia del centro de alumno</h3>
-        <button>Entrar</button>
-    
+    <div>
+        <vs-button shadow :active="1==1" >
+            <div class="contenedorTarjeta">
+
+                <h3 style="margin:0;">Presidencia del centro de alumno</h3>
+                <vs-button @click="itemSelecionado" >Entrar</vs-button>
+            </div>
+        </vs-button>
     </div>
-
-
 </template>
 
 
@@ -13,12 +15,19 @@
 
 export default {
 
-    data(){
+    data() {
 
+        return{
+
+        }
+    },
+    props: {
 
     },
-    props:{
-        
+    methods:{
+        itemSelecionado(){
+            this.$store.state.item = true
+        }
     }
 
 
@@ -26,30 +35,12 @@ export default {
 </script>
 
 <style scoped>
-
-.contenedorTarjeta{
+.contenedorTarjeta {
     display: flex;
     flex-direction: column;
     width: 200px;
-    background-color: #53f939;
-    border-radius: 15px;
-    color: #041901;
-    
-    padding: 20px;
-    margin: 10px;
-
-
-}
-.contenedorTarjeta button{
-
-    border-radius: 12px;
-    border: none;
-    margin-top: 10px;
     padding: 5px;
-    background-color: #b1fca6;
-    color: #041901;
-    cursor: pointer;
+
 
 }
-
 </style>

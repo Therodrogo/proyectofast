@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    activeMenu:0,
+    item:false
   },
   getters: {
   },

@@ -10,7 +10,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  height: 100vh;
+
 }
 
 nav {
@@ -19,10 +20,23 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+
+}
+.principal{
+  
+  height: 40px;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  
+}
+
+.boton{
+
+background-color: #53f939;
+padding: 10px;
+border-radius: 12px;
+cursor: pointer;
+
 }
 </style>

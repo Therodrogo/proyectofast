@@ -3,10 +3,17 @@ const Schema = mongoose.Schema;
 
 const votacioneSchema = new Schema({
     nombre: String,
-    votos: [
+    tipo: String,
+    votosM: [
         {
             votante: mongoose.Types.ObjectId,
-            votado: mongoose.Types.ObjectId,
+            votadoM: mongoose.Types.ObjectId,
+        }
+    ],
+    votosH: [
+        {
+            votante: mongoose.Types.ObjectId,
+            votadoH: mongoose.Types.ObjectId,
         }
     ],
     estado: Boolean,

@@ -5,14 +5,14 @@
         </div>
 
         <div class="caja">
-            <h3 style="margin-bottom: 0; color:#070609;">{{ nombreVotacion }}: Mejor Compañero y Mejor Compañera</h3>
+            <h3 style="margin-bottom: 0; color:#070609;">{{ votacion.nombre }}</h3>
             <div style="display: flex; justify-content: center;">
                 <div style="list">
                     <h4>Hombres</h4>
                     <div v-for="(item, index) in hombres" :key="index">
                         <vs-button flat :active="active1 == index" @click="votoHombre(index)">
-                            {{
-                                item.nombre }}</vs-button>
+                            {{ item.nombre }}
+                        </vs-button>
                     </div>
                 </div>
 
@@ -44,15 +44,17 @@ export default {
             active2: -2,
             hombres: [],
             mujeres: [],
-            tipo: null
+            tipo: null,
+            votacion:  this.$store.state.votacion
         }
     },
     async mounted() {
 
         const personas = await API.getUsuarios()
+
         personas.forEach(e => {
 
-            if (e.tipo === this.nombreVotacion) {
+            if (e.tipo === this.votacion.tipo) {
                 if (e.sexo) {
                     this.hombres.push(e)
                 }
@@ -62,11 +64,10 @@ export default {
             }
 
         });
+    
 
     },
-    props: {
-        nombreVotacion: ""
-    },
+
     methods: {
         iniciarNombres() {
 
@@ -85,8 +86,7 @@ export default {
         async confirmarVoto() {
             const persona1 = this.hombres[this.active1]
             const persona2 = this.mujeres[this.active2]
-
-            console.log(persona1.nombre, persona2.nombre)
+            
             if (persona1 != undefined && persona2 != undefined) {
 
 
@@ -104,26 +104,9 @@ export default {
                         const token = localStorage.getItem('token');
                         const user =  JSON.parse(token)
 
-                        const voto = {
-                            nombre: this.nombreVotacion +": Mejor Compañero y Mejor Compañera" ,
-                            tipo: this.nombreVotacion,
-                            votosM: [
-                                {
-                                    votante: user._id,
-                                    votadoM: persona1._id,
-                                }
-                            ],
-                            votosH: [
-                                {
-                                    votante: user._id,
-                                    votadoH: persona2._id,
-                                }
-                            ],
-                            estado: true,
-                        }
-
                         try {
-                            await API.agregarVotacion(voto)
+                            await API.enviarVotoM(this.votacion._id, user._id,persona2._id )
+                            await API.enviarVotoH(this.votacion._id, user._id,persona1._id )
 
                             this.$router.push("/login")
                         } catch (error) {

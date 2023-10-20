@@ -82,10 +82,10 @@ router.put('/agregarvotoM/:votacionID/:votanteID/:votadoMID', async (req, res) =
 
 
 
-router.put('/agregarvotoH/:votacionID/:votanteID/:votadoMID', async (req, res) => {
+router.put('/agregarvotoH/:votacionID/:votanteID/:votadoHID', async (req, res) => {
   const votacionID = req.params.votacionID;
   const votanteID = req.params.votanteID;
-  const votadoMID = req.params.votadoMID;
+  const votadoHID = req.params.votadoHID;
 
   try {
 
@@ -93,12 +93,12 @@ router.put('/agregarvotoH/:votacionID/:votanteID/:votadoMID', async (req, res) =
     const votante = await usuarioSchema.findById(votanteID);
     const votadoH = await usuarioSchema.findById(votadoHID);
 
-    if (!votacion || !votante || !votadoM) {
-      return res.status(404).json({ message: 'Votación, votante o votadoM no encontrado' });
+    if (!votacion || !votante || !votadoH) {
+      return res.status(404).json({ message: 'Votación, votante o votadoH no encontrado' });
     }
 
 
-    votacion.votosM.push({ votante: votanteID, votadoH: votadoHID });
+    votacion.votosH.push({ votante: votanteID, votadoH: votadoHID });
 
 
     await votacion.save();

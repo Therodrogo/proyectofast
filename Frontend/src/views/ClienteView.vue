@@ -2,15 +2,18 @@
     <div class="contenedor">
         <div style="display: flex; justify-content: space-between; width:100%">
             <p>{{ nombre }}</p>
-            <vs-button color="#000">Cerrar Sesion</vs-button>
+            <vs-button color="#000" to="/login">Cerrar Sesion</vs-button>
         </div>
 
         <div class="contenido">
             <div v-if="$store.state.item == false && votacion != null">
-                <TarjetaVotar :nombreVotacion="votacionNombre" />
+                <div v-for="(item, index) in arrayVotaciones" :key="index">
+                    <TarjetaVotar :votacion="item" />
+                </div>
+
             </div>
             <div v-if="$store.state.item == true">
-                <Votar :nombreVotacion="votacionNombre"  />
+                <Votar />
             </div>
         </div>
 
@@ -29,7 +32,8 @@ export default {
             items: [],
             votacion: null,
             nombre: null,
-            votacionNombre: ""
+            votacionNombre: "",
+            arrayVotaciones: []
         };
     },
     async mounted() {
@@ -47,6 +51,7 @@ export default {
                     this.votacion = votacion
 
                     this.votacionNombre = votacion.tipo
+                    this.arrayVotaciones.push(votacion)
 
                 }
             });

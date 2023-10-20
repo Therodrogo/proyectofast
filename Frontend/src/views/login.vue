@@ -41,7 +41,8 @@ export default {
 
             } else {
                 alert("Bienvenido")
-                localStorage.setItem("token", resp.token);
+                console.log(resp)
+                localStorage.setItem("token", JSON.stringify(resp)); 
                 this.$router.push("/cliente");
             }
         }

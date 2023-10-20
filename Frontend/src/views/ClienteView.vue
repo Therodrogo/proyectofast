@@ -6,16 +6,12 @@
         </div>
 
         <div class="contenido">
-            <div v-if="$store.state.item==false" v-for="(item, index) in 10" :key="index">
-
+            <div v-if="$store.state.item == false && votacion != null">
                 <TarjetaVotar />
-
             </div>
-            <div v-if="$store.state.item==true" >
-                <Votar/>
+            <div v-if="$store.state.item == true">
+                <Votar />
             </div>
-
-            
         </div>
 
     </div>
@@ -23,13 +19,32 @@
 
 
 <script>
-
+import API from "@/api"
 import TarjetaVotar from "../components/TarjetaVotar.vue"
 import Votar from "../components/Votar.vue"
 export default {
 
     data() {
-        items: []
+        return {
+            items: [],
+            votacion: null
+        };
+    },
+    async mounted() {
+        const votaciones = await API.getVotaciones();
+        // Obtenemos tipo de usuario con el localStorage
+        const token = localStorage.getItem('token');
+        try {
+            const user_token = JSON.parse(token);
+            votaciones.forEach(votacion => {
+            console.log(votacion.tipo, user_token.tipo)
+            if (votacion.tipo == user_token.tipo && votacion.estado == true) {
+                this.votacion = votacion
+            }
+        });
+        } catch (error) {
+            console.error('JSON parsing error:', error);
+        }
     },
     components: {
         TarjetaVotar,

@@ -17,12 +17,15 @@
         </div>
         <div class="contenedor">
             <h1>login</h1>
+            <login></login>
         </div>
     </div>
 </template>
 
 <script>
+import login from './login.vue';
 export default {
+  components: { login },
     data() {
         return {
 

@@ -27,6 +27,11 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Acciones</th>
+                    <th>Elegido Hombre Estudiante</th>
+                    <th>Elegido Mujer Estudiante</th>
+                    <th>Elegido Hombre Profesor</th>
+                    <th>Elegido Mujer Profesor</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -38,6 +43,10 @@
                         <button @click="endVote(vote)" :disabled="!vote.started || vote.ended"
                             class="action-btn end-btn">Termino</button>
                     </td>
+                    <td>{{ votoHombreE }}</td>
+                    <td>{{ votoMujerE }}</td>
+                    <td>{{ votoHombreP }}</td>
+                    <td>{{ votoMujerP }}</td>
                 </tr>
             </tbody>
         </table>
@@ -55,24 +64,30 @@ export default {
             formData: {
                 name: ''
             },
-            votes: []
+            votes: [],
+            isVoted: false,
+            votoHombreE: null,
+            votoMujerE: null,
+            votoHombreP: null,
+            votoMujerP: null,
         };
     },
     async mounted() {
-      var votaciones = await API.getVotaciones();
-      if(votaciones.length != 0){
-        if(votaciones[0].estado==true){
-            var isStarted = true;
-            var isEnded = false;
-        }else if(votaciones[0].estado==false){
-            var isStarted = false;
-            var isEnded = true;
-        }else{
-            var isStarted = false;
-            var isEnded = false;
-        }
-        var isStarted = votaciones[0].estado;
-        this.votes.push({
+        var votaciones = await API.getVotaciones();
+        if (votaciones.length != 0) {
+            if (votaciones[0].estado == true) {
+                var isStarted = true;
+                var isEnded = false;
+            } else if (votaciones[0].estado == false) {
+                var isStarted = false;
+                var isEnded = true;
+            } else {
+                var isStarted = false;
+                var isEnded = false;
+                this.isVoted = true;
+            }
+            var isStarted = votaciones[0].estado;
+            this.votes.push({
                 id: this.votes.length + 1,
                 name: votaciones[0].nombre,
                 started: isStarted,
@@ -80,10 +95,59 @@ export default {
             });
 
             this.formData.name = '';
-            this.showModal = false; 
-      }
+            this.showModal = false;
+        }
+        votaciones.forEach(votacion => {
+            if(votacion.votosM.length>0 && votacion.votosH.length>0){
+                this.calculoVotados(votacion);
+            }
+        });
     },
     methods: {
+        async calculoVotados(data) {
+            function obtenerMasVotados(votos) {
+                const conteoVotos = {};
+
+                votos.forEach(voto => {
+                    const idVotado = voto.votadoM || voto.votadoH;
+                    if (conteoVotos[idVotado]) {
+                        conteoVotos[idVotado]++;
+                    } else {
+                        conteoVotos[idVotado] = 1;
+                    }
+                });
+
+                let masVotadoId = null;
+                let maxVotos = 0;
+
+                for (let id in conteoVotos) {
+                    if (conteoVotos[id] > maxVotos) {
+                        masVotadoId = id;
+                        maxVotos = conteoVotos[id];
+                    }
+                }
+
+                return { masVotadoId, maxVotos };
+            }
+
+            
+            const masVotadoMujeres = obtenerMasVotados(data.votosM);
+            const masVotadoHombres = obtenerMasVotados(data.votosH);
+
+            if(data.tipo == "Estudiante"){
+                const HombreE = await API.getUserById(masVotadoHombres.masVotadoId);
+                const MujerE = await API.getUserById(masVotadoMujeres.masVotadoId);
+
+                this.votoHombreE = HombreE.nombre;
+                this.votoMujerE = MujerE.nombre;
+            }else{
+                const HombreP = await API.getUserById(masVotadoHombres.masVotadoId);
+                const MujerP  = await API.getUserById(masVotadoMujeres.masVotadoId);
+
+                this.votoHombreP = HombreP.nombre;
+                this.votoMujerP = MujerP.nombre;
+            }
+        },
         async handleSubmit() {
             // Agregar la votacion a la lista
             var votacionEstudiantes = {
@@ -132,6 +196,7 @@ export default {
             });
             vote.started = false;
             vote.ended = true;
+            this.isVoted = true;
         },
     }
 };

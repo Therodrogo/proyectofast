@@ -4,6 +4,18 @@
   </div>
 </template>
 
+<script>
+
+export default {
+
+  mounted(){
+    this.$router.push('/login')
+  }
+
+}
+
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

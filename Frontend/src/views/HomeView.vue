@@ -29,6 +29,9 @@ export default {
 
     }
   },
+  mounted(){
+    this.$router.push('/login')
+  },
   methods: {
     inicio() {
       this.$store.state.activeMenu = 0

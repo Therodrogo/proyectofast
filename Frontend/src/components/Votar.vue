@@ -91,15 +91,15 @@ export default {
 
 
                 Swal.fire({
-                    title: 'Estas seguro que deseas votar por:',
-                    text: persona1.nombre + " y " + persona2.nombre,
+                    title: '¿Estás seguro que deseas votar por:',
+                    text: persona1.nombre + " y " + persona2.nombre + "?",
                     showDenyButton: true,
                     confirmButtonText: 'Si',
                     denyButtonText: `No`,
                 }).then(async (result) => {
 
                     if (result.isConfirmed) {
-                        Swal.fire({ title: 'Se ha eviado su elección', icon: 'success', toast: true, position: "top" })
+                        Swal.fire({ title: 'Se ha enviado su elección', icon: 'success', toast: true, position: "top" })
                         this.$store.state.item = false
                         const token = localStorage.getItem('token');
                         const user =  JSON.parse(token)

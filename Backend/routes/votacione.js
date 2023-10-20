@@ -4,39 +4,52 @@ const votacionechema = require('../models/votacione.js');
 const usuarioSchema = require('../models/usuario.js');
 
 router.post('/addvotacione', async (req, res) => {
-    const body = req.body;
-    const votacione = new votacionechema(body);
-    await votacione.save()
-      .then((result) => {
-        res.json(result)
-  
-      })
-      .catch((err) => {
-        console.log(err)
-        res.json(err)
-      });
-  }
-  );
+  const body = req.body;
+  const votacione = new votacionechema(body);
+  await votacione.save()
+    .then((result) => {
+      res.json(result)
 
-
-  router.get('/getvotacionid/:id', async (req, res) => {
-    const vID = req.params.id
-    console.log(req.params)
-    await usuarioSchema.findOne({
-      _id: vID
-  
     })
-      .then((result) => {
-        console.log(result)
-        res.json(result)
-      })
-      .catch((err) => {
-        console.log(err)
-        res.json(err)
-      });
-  
-  }
-  );
+    .catch((err) => {
+      console.log(err)
+      res.json(err)
+    });
+}
+);
+
+router.get('/getvotacionid/:id', async (req, res) => {
+  const vID = req.params.id
+  console.log(req.params)
+  await usuarioSchema.findOne({
+    _id: vID
+
+  })
+    .then((result) => {
+      console.log(result)
+      res.json(result)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.json(err)
+    });
+
+}
+);
+
+router.get('/getvotaciones', async (req, res) => {
+  // Obtener todas las votaciones
+  await votacionechema.find({})
+    .then((result) => {
+      res.json(result)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.json(err)
+    });
+
+}
+);
 
 
 router.put('/agregarvotoM/:votacionID/:votanteID/:votadoMID', async (req, res) => {
@@ -44,7 +57,7 @@ router.put('/agregarvotoM/:votacionID/:votanteID/:votadoMID', async (req, res) =
   const votanteID = req.params.votanteID;
   const votadoMID = req.params.votadoMID;
   try {
-  
+
     const votacion = await votacionechema.findById(votacionID);
     const votante = await usuarioSchema.findById(votanteID);
     const votadoM = await usuarioSchema.findById(votadoMID);
@@ -65,7 +78,7 @@ router.put('/agregarvotoM/:votacionID/:votanteID/:votadoMID', async (req, res) =
     res.status(500).json({ message: 'Error al agregar el votoM a la votación' });
   }
 });
-  
+
 
 
 
@@ -84,10 +97,10 @@ router.put('/agregarvotoH/:votacionID/:votanteID/:votadoMID', async (req, res) =
       return res.status(404).json({ message: 'Votación, votante o votadoM no encontrado' });
     }
 
-  
+
     votacion.votosM.push({ votante: votanteID, votadoH: votadoHID });
 
-  
+
     await votacion.save();
 
     res.json({ message: 'VotoM agregado con éxito a la votación' });
@@ -98,11 +111,14 @@ router.put('/agregarvotoH/:votacionID/:votanteID/:votadoMID', async (req, res) =
 });
 
 //actualizar estado de la votacion
-router.put('/cambiarestadovotacion/:votacionID', async (req, res) => {
-  const votacionID = req.params.votacionID;
-  const nuevoEstado = req.body.estado; // El nuevo estado de la votación (true o false)
+router.put('/cambiarestadovotacion', async (req, res) => {
+  const body = req.body;
+  const votacionID = body._id;
+  const nuevoEstado = body.estado; // El nuevo estado de la votación (true o false)
 
   try {
+
+    console.log(votacionID, nuevoEstado)
     // Verifica si la votación existe
     const votacion = await votacionechema.findById(votacionID);
 

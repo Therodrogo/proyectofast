@@ -45,6 +45,8 @@
 </template>
 
 <script>
+
+import API from '@/api';
 export default {
     data() {
         return {
@@ -56,21 +58,78 @@ export default {
             votes: []
         };
     },
+    async mounted() {
+      var votaciones = await API.getVotaciones();
+      if(votaciones.length != 0){
+        if(votaciones[0].estado==true){
+            var isStarted = true;
+            var isEnded = false;
+        }else if(votaciones[0].estado==false){
+            var isStarted = false;
+            var isEnded = true;
+        }else{
+            var isStarted = false;
+            var isEnded = false;
+        }
+        var isStarted = votaciones[0].estado;
+        this.votes.push({
+                id: this.votes.length + 1,
+                name: votaciones[0].nombre,
+                started: isStarted,
+                ended: isEnded,
+            });
+
+            this.formData.name = '';
+            this.showModal = false; 
+      }
+    },
     methods: {
-        handleSubmit() {
+        async handleSubmit() {
+            // Agregar la votacion a la lista
+            var votacionEstudiantes = {
+                nombre: this.formData.name,
+                tipo: "Estudiante",
+                votosM: [],
+                votosH: [],
+                estado: null,
+            };
+
+            var votacionProfesores = {
+                nombre: this.formData.name,
+                tipo: "Profesor",
+                votosM: [],
+                votosH: [],
+                estado: null,
+            };
+
+            const resp1 = await API.agregarVotacion(votacionEstudiantes)
+            const resp2 = await API.agregarVotacion(votacionProfesores)
+
             this.votes.push({
                 id: this.votes.length + 1,
                 name: this.formData.name,
                 started: false,
                 ended: false,
             });
+
             this.formData.name = '';
             this.showModal = false; // cerrar el modal
         },
-        startVote(vote) {
+        async startVote(vote) {
+            var votaciones = await API.getVotaciones();
+            console.log(votaciones);
+            votaciones.forEach(async votacion => {
+                votacion.estado = true; // cambiar el estado de todas las votaciones
+                await API.cambiarEstadoVotacion(votacion);
+            });
             vote.started = true;
         },
-        endVote(vote) {
+        async endVote(vote) {
+            var votaciones = await API.getVotaciones();
+            votaciones.forEach(async votacion => {
+                votacion.estado = false; // cambiar el estado de todas las votaciones
+                await API.cambiarEstadoVotacion(votacion);
+            });
             vote.started = false;
             vote.ended = true;
         },
@@ -196,4 +255,5 @@ export default {
 .end-btn:disabled {
     background-color: #ddd;
     cursor: not-allowed;
-}</style>
+}
+</style>

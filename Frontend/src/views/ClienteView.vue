@@ -1,16 +1,16 @@
 <template>
     <div class="contenedor">
         <div style="display: flex; justify-content: space-between; width:100%">
-            <p>Pablo Gonzalez Jara</p>
+            <p>{{ nombre }}</p>
             <vs-button color="#000">Cerrar Sesion</vs-button>
         </div>
 
         <div class="contenido">
             <div v-if="$store.state.item == false && votacion != null">
-                <TarjetaVotar />
+                <TarjetaVotar :nombreVotacion="votacionNombre" />
             </div>
             <div v-if="$store.state.item == true">
-                <Votar />
+                <Votar :nombreVotacion="votacionNombre"  />
             </div>
         </div>
 
@@ -27,21 +27,29 @@ export default {
     data() {
         return {
             items: [],
-            votacion: null
+            votacion: null,
+            nombre: null,
+            votacionNombre: ""
         };
     },
     async mounted() {
         const votaciones = await API.getVotaciones();
         // Obtenemos tipo de usuario con el localStorage
         const token = localStorage.getItem('token');
+
         try {
             const user_token = JSON.parse(token);
+            this.nombre = user_token.nombre
+
             votaciones.forEach(votacion => {
-            console.log(votacion.tipo, user_token.tipo)
-            if (votacion.tipo == user_token.tipo && votacion.estado == true) {
-                this.votacion = votacion
-            }
-        });
+                console.log(votacion.tipo, user_token.tipo)
+                if (votacion.tipo == user_token.tipo && votacion.estado == true) {
+                    this.votacion = votacion
+
+                    this.votacionNombre = votacion.tipo
+
+                }
+            });
         } catch (error) {
             console.error('JSON parsing error:', error);
         }

@@ -3,7 +3,7 @@
         <vs-button shadow :active="1==1" >
             <div class="contenedorTarjeta">
 
-                <h3 style="margin:0;">Presidencia del centro de alumno</h3>
+                <h3 style="margin:0;">{{nombreVotacion}} : Mejor Compañero y Mejor Compañera</h3>
                 <vs-button @click="itemSelecionado" >Entrar</vs-button>
             </div>
         </vs-button>
@@ -22,7 +22,7 @@ export default {
         }
     },
     props: {
-
+        nombreVotacion:""
     },
     methods:{
         itemSelecionado(){

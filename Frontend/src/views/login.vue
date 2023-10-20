@@ -22,7 +22,8 @@ export default {
     data() {
         return {
             rut: "",
-            contrasena: ""
+            contrasena: "",
+            valor: 0
         };
     },
     methods: {
@@ -33,6 +34,13 @@ export default {
             };
             const resp = await API.login(data);
 
+            const allVotos = await API.getVotaciones()
+
+            console.log("res")
+            console.log(resp)
+
+
+
             if (resp == null) {
                 alert("Error de conexión")
             }
@@ -40,10 +48,29 @@ export default {
                 alert("Usuario o contraseña incorrectos")
 
             } else {
+
+                allVotos.forEach(e => {
+                    try {
+                        if (e.votosM[0].votante == resp._id) {
+                            
+                            this.valor = this.valor + 1
+           
+                        }
+                    } catch (error) {
+
+                    }
+                });
+
+            }
+
+            if (this.valor == 0) {
                 alert("Bienvenido")
                 console.log(resp)
-                localStorage.setItem("token", JSON.stringify(resp)); 
+                localStorage.setItem("token", JSON.stringify(resp));
                 this.$router.push("/cliente");
+            }
+            else{
+                alert("Ya has cumplido con tu votacion")
             }
         }
     }

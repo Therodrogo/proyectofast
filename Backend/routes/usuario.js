@@ -62,4 +62,18 @@ router.get('/getusuarioid/:id', async (req, res) => {
 }
 );
 
+
+router.get('/getusuarios', async (req, res) => {
+  // Obtener todas las votaciones
+  await usuarioSchema.find({})
+    .then((result) => {
+      res.json(result)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.json(err)
+    });
+
+}
+);
 module.exports = router;

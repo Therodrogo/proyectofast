@@ -30,6 +30,14 @@ export default class API{
             return error.response.data
         }
     }
+    static async getUsuarios(){
+        try {
+            const res = await axios.get(url+"getusuarios")
+            return res.data
+        } catch (error) {
+            return error.response.data
+        }
+    }
 
     static async cambiarEstadoVotacion(data){
         try {
